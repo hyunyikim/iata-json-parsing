@@ -61,7 +61,7 @@ public class IataServiceImpl implements IataService {
 				String key = (String) iterator.next();
 				HashMap<String, Object> value = (HashMap<String, Object>) map.get(key);
 
-				if (value.get("country").equals("KR")) {
+				if (value.get("country").equals("KR") && !value.get("iata").equals("")) {
 					HashMap<String, String> keyMap = new HashMap<String, String>();
 					keyMap.put("key", key);
 

@@ -6,8 +6,7 @@
 </head>
 <body>
 	<c:forEach var="iata" items="${iataList}">
-		${iata.value.name }<br>
-		<a href="icao?icao=${iata.value.icao }">${iata.value.name }</a>
+		<a href="icao?icao=${iata.value.icao }">${iata.value.name }</a><br>
 	</c:forEach>
 </body>
 </html>
