@@ -23,12 +23,20 @@ public class HomeController {
 
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) throws Exception {
+	public String home(Model model) throws Exception {
 
 		JSONArray iataList = service.selectKRIataList();
 		model.addAttribute("iataList", iataList);
 		
 		return "home";
+	}
+	
+	@RequestMapping(value = "/icao", method = RequestMethod.GET)
+	public String detail(Model model, String icao) throws Exception {
+
+		System.out.println("icao 컨트롤러 진입");
+		
+		return "detail";
 	}
 	
 }

@@ -5,9 +5,10 @@
 <title>Home</title>
 </head>
 <body>
-	<c:forEach var="iata" items="${iataList}">
+	<%-- <c:forEach var="iata" items="${iataList}">
 		${iata.value.name }<br>
-		<a href="icao?icao=${iata.value.icao }">${iata.value.name }</a>
-	</c:forEach>
+		<a href="iata/${iata.value.name }">${iata.value.name }</a>
+	</c:forEach> --%>
+	icao 컨트롤러
 </body>
 </html>
