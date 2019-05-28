@@ -6,6 +6,6 @@ import org.json.simple.JSONObject;
 public interface IataService {
 	
 	JSONArray selectKRIataList() throws Exception;
-	JSONObject selectOneIata() throws Exception;
+	JSONObject selectOneIata(String icao) throws Exception;
 
 }

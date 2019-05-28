@@ -1,12 +1,9 @@
 package kr.co.controller;
 
-import java.util.Locale;
-
 import javax.annotation.Resource;
 
 import org.json.simple.JSONArray;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +31,8 @@ public class HomeController {
 	@RequestMapping(value = "/icao", method = RequestMethod.GET)
 	public String detail(Model model, String icao) throws Exception {
 
-		System.out.println("icao 컨트롤러 진입");
+		JSONObject iata = service.selectOneIata(icao);
+		model.addAttribute("iata", iata);
 		
 		return "detail";
 	}

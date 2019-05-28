@@ -20,12 +20,21 @@ import org.springframework.stereotype.Service;
 @Service("iataService")
 public class IataServiceImpl implements IataService {
 
+	
 	@Override
 	public JSONArray selectKRIataList() throws Exception {
 
 		JSONArray jsonArr = readJsonFromUrl("https://raw.githubusercontent.com/mwgg/Airports/master/airports.json");
 		return jsonArr;
 	}
+	
+	@Override
+	public JSONObject selectOneIata(String icao) throws Exception {
+		
+		JSONObject jsonObj = readJsonObjectFromUrl("https://raw.githubusercontent.com/mwgg/Airports/master/airports.json", icao);
+		return jsonObj;
+	}
+	
 
 	private static String readAll(Reader rd) throws IOException {
 		StringBuilder sb = new StringBuilder();
@@ -49,11 +58,12 @@ public class IataServiceImpl implements IataService {
 			// Object로 parse
 			Object obj = parser.parse(jsonText);
 
-			// Object 객체를 HashMap으로 변환 후 JSONArray에 담기
+			// Object 객체를 HashMap으로 변환 후 JSONObject, JSONArray에 담기
 			HashMap<String, Object> map = (HashMap<String, Object>) obj;
 			Set set = map.keySet();
 			Iterator iterator = set.iterator();
 
+			
 			// 전체 iata 리스트
 			JSONArray jsonArr = new JSONArray();
 
@@ -62,24 +72,13 @@ public class IataServiceImpl implements IataService {
 				HashMap<String, Object> value = (HashMap<String, Object>) map.get(key);
 
 				if (value.get("country").equals("KR") && !value.get("iata").equals("")) {
-					HashMap<String, String> keyMap = new HashMap<String, String>();
-					keyMap.put("key", key);
-
-					HashMap<String, Object> valueMap = new HashMap<String, Object>();
-					valueMap.put("value", value);
-
-					HashMap<String, Object> tempMap = new HashMap<String, Object>();
-					tempMap.put("key", key);
-					tempMap.put("value", value);
 
 					JSONObject tempObj = new JSONObject();
 					tempObj.put("key", key);
 					tempObj.put("value", value);
 
 					jsonArr.add(tempObj);
-
 				}
-
 			}
 			System.out.println("jsonArr : " + jsonArr);
 
@@ -89,10 +88,46 @@ public class IataServiceImpl implements IataService {
 			is.close();
 		}
 	}
+	
+	
+	public static JSONObject readJsonObjectFromUrl(String url, String icao) throws IOException, ParseException {
 
-	@Override
-	public JSONObject selectOneIata() throws Exception {
-		return null;
+		JSONParser parser = new JSONParser();
+		InputStream is = new URL(url).openStream();
+
+		try {
+			// 버퍼로 데이터 읽어오기
+			BufferedReader rd = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+			String jsonText = readAll(rd);
+
+			// Object로 parse
+			Object obj = parser.parse(jsonText);
+
+			// Object 객체를 HashMap으로 변환 후 JSONObject, JSONArray에 담기
+			HashMap<String, Object> map = (HashMap<String, Object>) obj;
+			Set set = map.keySet();
+			Iterator iterator = set.iterator();
+			
+			// 선택한 iata 정보
+			JSONObject jsonObj = new JSONObject();
+
+			while (iterator.hasNext()) {
+				String key = (String) iterator.next();
+				HashMap<String, Object> value = (HashMap<String, Object>) map.get(key);
+
+				if (key.equals(icao)) {
+					jsonObj.put(key, value);
+				}
+			}
+			System.out.println("jsonObj : " + jsonObj);
+
+			return jsonObj;
+
+		} finally {
+			is.close();
+		}
 	}
+
+	
 
 }
